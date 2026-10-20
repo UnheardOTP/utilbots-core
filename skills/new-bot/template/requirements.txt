@@ -1,0 +1,3 @@
+utilbots-core @ git+https://github.com/UnheardOTP/utilbots-core@__CORE_REF__
+pytest==8.3.4
+pytest-asyncio==0.25.0

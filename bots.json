@@ -1,0 +1,27 @@
+{
+  "_comment": "Port and slug registry for everything UtilBots runs on the home server. The new-bot skill picks the next free port from 3500 up and appends here.",
+  "apps": [
+    {
+      "slug": "utilbots",
+      "kind": "catalog",
+      "repo": "UnheardOTP/utilbots.com",
+      "port": 3470,
+      "url": "https://utilbots.com"
+    },
+    {
+      "slug": "stormbot",
+      "kind": "bot",
+      "repo": "UnheardOTP/stormbot.utilbots.com",
+      "port": 8080,
+      "url": "https://stormbot.utilbots.com",
+      "note": "pre-standard; deploy dir weatherbot, compose project weatherbot until migrated"
+    },
+    {
+      "slug": "mediabot",
+      "kind": "bot",
+      "repo": "UnheardOTP/mediabot.utilbots.com",
+      "port": 3500,
+      "url": "https://mediabot.utilbots.com"
+    }
+  ]
+}

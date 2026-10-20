@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Pricing · {{ spec.name }}{% endblock %}
+{% block content %}
+<h1>Plans</h1>
+<div class="grid3">
+{% for p in PLANS %}<div class="card plan">{% include "_plan_card.html" %}</div>{% endfor %}
+</div>
+<p class="muted">Plans are per server and managed from your <a href="/dashboard">dashboard</a>.
+{% if settings.trial_enabled %}Every server can try {{ PLANS[1].name if PLANS|length > 1 else 'a paid plan' }} free for {{ settings.trial_days }} days.{% endif %}</p>
+<p class="center"><a class="btn big" href="{{ invite }}">Add to Discord</a></p>
+{% endblock %}

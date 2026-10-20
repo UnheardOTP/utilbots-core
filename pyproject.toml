@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "utilbots-core"
+version = "0.1.0"
+description = "Shared foundation for UtilBots Discord bots: Discord login, server dashboard, plans, Stripe billing, admin panel, bot base class."
+requires-python = ">=3.12"
+dependencies = [
+  "py-cord==2.8.1",
+  "fastapi==0.115.6",
+  "uvicorn[standard]==0.34.0",
+  "jinja2==3.1.5",
+  "python-multipart==0.0.20",
+  "httpx==0.28.1",
+  "sqlalchemy==2.0.36",
+  "psycopg[binary]==3.2.3",
+  "stripe==11.4.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.4", "pytest-asyncio==0.25.0"]
+
+[tool.setuptools.packages.find]
+include = ["utilbots_core*"]
+
+[tool.setuptools.package-data]
+utilbots_core = ["web/templates/*.html", "web/static/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"

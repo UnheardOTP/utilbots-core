@@ -1,0 +1,13 @@
+{
+  "slug": "__SLUG__",
+  "name": "__NAME__",
+  "emoji": "__EMOJI__",
+  "tagline": "__TAGLINE__",
+  "description": "__TAGLINE__",
+  "tier": "freemium",
+  "site_url": "https://__SLUG__.utilbots.com",
+  "invite_url": null,
+  "support_url": "https://discord.gg/DymH3AyAUU",
+  "features": [],
+  "status": "hidden"
+}

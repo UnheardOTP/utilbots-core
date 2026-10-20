@@ -1,0 +1,37 @@
+# Local run: cp .env.example .env, fill in the Discord values, then `docker compose up -d --build`.
+x-app: &app
+  build: .
+  restart: unless-stopped
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+psycopg://__SNAKE__:local@db:5432/__SNAKE__
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: __SNAKE__
+      POSTGRES_PASSWORD: local
+      POSTGRES_DB: __SNAKE__
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __SNAKE__"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    <<: *app
+    ports:
+      - "8080:8000"
+
+  bot:
+    <<: *app
+    command: ["python", "-m", "app.bot.main"]
+
+volumes:
+  pgdata:

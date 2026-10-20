@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · {{ spec.name }}{% endblock %}
+{% block content %}
+<h1>Your servers</h1>
+<p class="muted">Servers where you have Manage Server permission.</p>
+{% if not items %}<p>No manageable servers found.</p>{% endif %}
+<div class="list">
+{% for i in items %}
+  <div class="row">
+    {% if i.g|guild_icon %}<img class="icon" src="{{ i.g|guild_icon }}" alt="">{% else %}<span class="icon ph">{{ i.g.name[:1] }}</span>{% endif %}
+    <div class="grow"><strong>{{ i.g.name }}</strong>
+      {% if i.installed %}<span class="tag">{{ i.plan.name }}</span>{% endif %}</div>
+    {% if i.installed %}
+      <a class="btn" href="/guild/{{ i.g.id }}">Configure</a>
+      <a class="btn ghost" href="/guild/{{ i.g.id }}/billing">Subscription</a>
+    {% else %}
+      <a class="btn" href="{{ i.invite }}">Add bot</a>
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

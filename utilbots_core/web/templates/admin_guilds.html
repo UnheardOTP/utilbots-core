@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Servers · Admin{% endblock %}
+{% block content %}
+<h1>Servers</h1>{% include "admin_nav.html" %}
+<form method="get" class="inline"><input name="q" value="{{ q }}" placeholder="Search name or ID"> <button class="btn">Search</button></form>
+<table>
+  <tr><th>Name</th><th>ID</th><th>Plan</th><th>Status</th></tr>
+  {% for g in guilds %}
+  <tr><td><a href="/admin/guilds/{{ g.id }}">{{ g.name or '(unnamed)' }}</a></td><td>{{ g.id }}</td>
+    <td>{{ plans[g.id].name }}</td>
+    <td>{% if g.disabled %}<span class="tag lock">disabled</span>{% elif g.installed %}installed{% else %}left{% endif %}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

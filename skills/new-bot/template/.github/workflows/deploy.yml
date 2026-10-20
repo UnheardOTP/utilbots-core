@@ -1,0 +1,21 @@
+# Tests on every push/PR; deploys pushes to main once the bot is provisioned (repo variable DEPLOY_ENABLED=true,
+# set by the new-bot skill as its last step). The pipeline itself lives in utilbots-core.
+name: Deploy __NAME__
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pipeline:
+    uses: UnheardOTP/utilbots-core/.github/workflows/deploy-bot.yml@__WORKFLOW_REF__
+    permissions:
+      contents: read
+      packages: write
+    with:
+      slug: __SLUG__
+      port: __PORT__
+      deploy: ${{ vars.DEPLOY_ENABLED == 'true' && github.event_name != 'pull_request' }}
+    secrets: inherit

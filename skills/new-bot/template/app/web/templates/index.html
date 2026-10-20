@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>{{ spec.tagline }}</h1>
+  <a class="btn big" href="{{ invite }}">Add to Discord</a>
+  <a class="btn big ghost" href="/pricing">See plans</a>
+</section>
+<section class="grid3">
+  {% for key, label in FEATURES.items() %}<div class="card"><p>{{ label }}</p></div>{% endfor %}
+</section>
+{% endblock %}

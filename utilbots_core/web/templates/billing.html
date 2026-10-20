@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Subscription · {{ guild.name }}{% endblock %}
+{% block content %}
+<h1>{{ guild.name }} — Subscription</h1>
+<p>Current plan: <span class="tag">{{ plan.name }}</span>
+  {% if expiry %}<span class="muted">until {{ expiry.strftime('%b %d, %Y') }}</span>
+  {% elif plan.rank > 0 %}<span class="muted">no expiry</span>{% endif %}</p>
+{% if can_trial and trial_plan %}
+<form method="post" action="/guild/{{ guild.id }}/billing/trial" class="card">
+  <input type="hidden" name="csrf" value="{{ ws.csrf }}">
+  <strong>Try {{ trial_plan.name }} free for {{ settings.trial_days }} days</strong> — one trial per server.
+  <button class="btn">Start trial</button></form>
+{% endif %}
+{% if has_customer and stripe_on %}
+<form method="post" action="/guild/{{ guild.id }}/billing/portal" class="inline"><input type="hidden" name="csrf" value="{{ ws.csrf }}">
+  <button class="btn ghost">Manage billing (invoices, card, cancel, change plan)</button></form>
+{% endif %}
+<div class="grid3">
+{% for p in PAID %}
+  <div class="card plan {{ 'current' if p.key == plan.key }}">
+    {% include "_plan_card.html" %}
+    {% if p.key == plan.key %}<span class="tag">Current</span>
+    {% else %}
+    <form method="post" action="/guild/{{ guild.id }}/billing/checkout"><input type="hidden" name="csrf" value="{{ ws.csrf }}">
+      <input type="hidden" name="plan" value="{{ p.key }}"><button class="btn">Choose {{ p.name }}</button></form>
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+<p class="muted">{% if stripe_on %}Payments are processed securely by Stripe. Subscriptions renew monthly and can be canceled any time from Manage billing.{% else %}Online payments are not enabled yet; upgrades are currently applied by the bot owner.{% endif %}</p>
+{% endblock %}

@@ -1,0 +1,46 @@
+# Production stack. CI copies this file to /mnt/user/appdata/__SLUG__ and runs it as compose project "__SLUG__".
+# Env: the shared UtilBots .env first, then this bot's own .env (which wins). Neither is ever committed or sent by CI.
+x-app: &app
+  image: ${IMAGE:-ghcr.io/unheardotp/__SLUG__}:${IMAGE_TAG:-latest}
+  restart: unless-stopped
+  env_file:
+    - ../utilbots-shared/.env
+    - .env
+  environment:
+    DATABASE_URL: postgresql+psycopg://__SNAKE__:${POSTGRES_PASSWORD}@db:5432/__SNAKE__
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: __SNAKE__
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: __SNAKE__
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __SNAKE__"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    <<: *app
+    ports:
+      - "${WEB_PORT:-__PORT__}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/healthz')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  bot:
+    <<: *app
+    command: ["python", "-m", "app.bot.main"]
+
+volumes:
+  pgdata:

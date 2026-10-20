@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}{{ guild.name }} · {{ spec.name }}{% endblock %}
+{% block content %}
+<h1>{{ guild.name }} <span class="tag">{{ plan.name }}</span></h1>
+<p><a href="/guild/{{ guild.id }}/billing">Subscription</a></p>
+{% block settings %}<p class="muted">Everything is configured from Discord with slash commands.</p>{% endblock %}
+{% endblock %}

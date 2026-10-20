@@ -1,0 +1,6 @@
+<h2>{{ p.name }}</h2>
+<div class="price">{{ p.price_label }}</div>
+{% for h in p.highlights %}<p class="muted hl">{{ h }}</p>{% endfor %}
+<ul class="checks">
+  {% for key, label in FEATURES.items() %}<li class="{{ 'yes' if p.has(key) else 'no' }}">{{ label }}</li>{% endfor %}
+</ul>

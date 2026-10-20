@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ spec.name }}{% endblock %}</title>
+  <meta name="description" content="{{ spec.tagline }}">
+  <link rel="stylesheet" href="/core-static/core.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/">{{ spec.emoji }} {{ spec.name }}</a>
+  <nav>
+    {% block nav_links %}<a href="/pricing">Pricing</a>{% endblock %}
+    <a href="{{ spec.support_url }}" target="_blank" rel="noopener">Support</a>
+    {% if ws %}
+      <a href="/dashboard">Dashboard</a>
+      {% if is_admin %}<a href="/admin">Admin</a>{% endif %}
+      <form method="post" action="/logout" class="inline"><input type="hidden" name="csrf" value="{{ ws.csrf }}">
+        <button class="link">Log out ({{ ws.username }})</button></form>
+    {% else %}
+      <a class="btn" href="/login">Log in with Discord</a>
+    {% endif %}
+  </nav>
+</header>
+<main>
+  {% if msg %}<div class="flash ok">{{ msg }}</div>{% endif %}
+  {% if err %}<div class="flash bad">{{ err }}</div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer>
+  <p><a href="https://utilbots.com" target="_blank" rel="noopener">UtilBots</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></p>
+  {{ spec.footer_note }}
+</footer>
+</body>
+</html>

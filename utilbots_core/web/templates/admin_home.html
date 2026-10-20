@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Admin · {{ spec.name }}{% endblock %}
+{% block content %}
+<h1>Admin</h1>{% include "admin_nav.html" %}
+<div class="grid3">
+  {% for label, value in stats %}<div class="card"><div class="price">{{ value }}</div>{{ label }}</div>{% endfor %}
+</div>
+{% endblock %}

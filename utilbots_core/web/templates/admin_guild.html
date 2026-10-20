@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ guild.name }} · Admin{% endblock %}
+{% block content %}
+<h1>{{ guild.name or guild.id }} <span class="tag">{{ plan.name }}</span></h1>{% include "admin_nav.html" %}
+<p class="muted">ID {{ guild.id }} · {{ 'installed' if guild.installed else 'bot not present' }}</p>
+
+<h2>Grant subscription</h2>
+<form method="post" action="/admin/guilds/{{ guild.id }}/grant" class="card form">
+  <input type="hidden" name="csrf" value="{{ ws.csrf }}">
+  <label>Plan <select name="plan">{% for p in PAID %}<option value="{{ p.key }}">{{ p.name }}</option>{% endfor %}</select></label>
+  <label>Days <span class="muted">(blank = no expiry)</span> <input name="days" inputmode="numeric"></label>
+  <label>Note <input name="note" maxlength="255"></label>
+  <button class="btn">Grant</button>
+</form>
+<form method="post" action="/admin/guilds/{{ guild.id }}/revoke" class="inline"><input type="hidden" name="csrf" value="{{ ws.csrf }}">
+  <button class="btn ghost danger">Cancel all active subscriptions</button></form>
+<form method="post" action="/admin/guilds/{{ guild.id }}/toggle" class="inline"><input type="hidden" name="csrf" value="{{ ws.csrf }}">
+  <button class="btn ghost danger">{{ 'Enable' if guild.disabled else 'Disable' }} server</button></form>
+
+<h2>History</h2>
+<table><tr><th>Plan</th><th>Source</th><th>Status</th><th>Starts</th><th>Expires</th><th>Note</th></tr>
+{% for s in guild.subscriptions %}
+<tr><td>{{ s.plan }}</td><td>{{ s.source }}</td><td>{{ 'live' if s.is_live(now) else s.status if s.status != 'active' else 'expired' }}</td>
+<td>{{ s.starts_at.strftime('%Y-%m-%d') }}</td><td>{{ s.expires_at.strftime('%Y-%m-%d') if s.expires_at else '—' }}</td><td>{{ s.note }}</td></tr>
+{% else %}<tr><td colspan="6" class="muted">None</td></tr>{% endfor %}</table>
+{% block admin_guild_extra %}{% endblock %}
+{% endblock %}

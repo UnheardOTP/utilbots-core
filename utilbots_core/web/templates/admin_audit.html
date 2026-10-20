@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Audit · Admin{% endblock %}
+{% block content %}
+<h1>Audit log</h1>{% include "admin_nav.html" %}
+<table><tr><th>When (UTC)</th><th>Actor</th><th>Action</th><th>Target</th><th>Detail</th></tr>
+{% for r in rows %}<tr><td>{{ r.at.strftime('%Y-%m-%d %H:%M') }}</td><td>{{ r.actor_id }}</td><td>{{ r.action }}</td><td>{{ r.target }}</td><td>{{ r.detail }}</td></tr>
+{% else %}<tr><td colspan="5" class="muted">Nothing yet</td></tr>{% endfor %}</table>
+{% endblock %}
